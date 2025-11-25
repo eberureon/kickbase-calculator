@@ -52,7 +52,7 @@ export class KickbasePlayer {
 		this.isDeactivated = false;
 		this.isDeleted = false;
 		this.marketValuesShown = false;
-		this.isPersitantDeleted = false;
+		this.isPersitantDeleted = true;
 		this.nameHash = "";
 		this.leagueId = -1;
 		this.username = "";
@@ -173,13 +173,13 @@ export class KickbasePlayer {
 		return n.format("0,0 $");
 	}
 
-	public valueString = 0;
+	public valueString = "0";
 	private getValueTmp() {
 		let n = numeral(this.value);
 		return n.format("0,0 $");
 	}
 
-	public valuePercentString = 0;
+	public valuePercentString = "0";
 	private getValuePercentTmp() {
 		let n = numeral((this.value - this.marketValue) / this.marketValue);
 		return n.format("0.000%");

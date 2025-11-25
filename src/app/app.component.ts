@@ -1,10 +1,14 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AngularSvgIconModule } from 'angular-svg-icon';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
 import { ApiService } from './services/api.service';
 
-import * as numeral from 'numeral';
+import numeral from 'numeral';
 import 'numeral/locales/de'
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { KickbaseGroup } from './model/kickbase-group';
 import { KickbasePlayer } from './model/kickbase-player';
@@ -14,6 +18,9 @@ import { KickbaseMarket } from './model/kickbase-market';
 import { KickbaseGift } from './model/kickbase-gift';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ModalComponent } from './components/modal/modal.component';
+import { LoginComponent } from './components/login/login.component';
+import { HelpComponent } from './components/help/help.component';
+import { PlayerItemComponent } from './components/player-item/player-item.component';
 import { KickbasePlayerStats } from './model/kickbase-player-stats';
 import { NgbTypeahead, NgbTypeaheadSelectItemEvent } from './typeahead/typeahead';
 import { merge, Observable, of, Subject } from 'rxjs';
@@ -29,6 +36,17 @@ window.PayPal = window.PayPal || {};
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    AngularSvgIconModule,
+    AutocompleteLibModule,
+    LoginComponent,
+    HelpComponent,
+    PlayerItemComponent,
+    MarketOverviewComponent
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -160,9 +178,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.auto.clear();
   }
 
-  onChangeSearch(val: string) {
+  onChangeSearch(event: any) {
     // fetch remote data from here
     // And reassign the 'data' which is binded to 'data' property.
+    const val = typeof event === 'string' ? event : String(event.target?.value || event);
   }
 
   onFocused(e) {
@@ -446,7 +465,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
 
-  onLoadAllDetailsForPlayer = async (player: KickbasePlayer) => {
+  onLoadAllDetailsForPlayer = async (event: any) => {
+    // Handle both direct player objects and events
+    const player = event?.id ? event : (event.target ? null : event);
+    if (!player || !player.id) return;
     if (player.isInEditMode) {
       return;
     }
@@ -628,8 +650,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.kickbaseGroup = new KickbaseGroup();
   }
 
-  onSelectedSortingChanged(sorting: number) {
+  onSelectedSortingChanged(event: any) {
+    const sorting = typeof event === 'number' ? event : Number(event.target?.value || event);
     localStorage.setItem('sorting', sorting.toString());
+    this.selectedSorting = sorting;
 
     this.sortCurrentPlayers();
   }
@@ -688,9 +712,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.printMode = !this.printMode;
   }
 
-  onFridayDateChanged(countDays: string) {
+  onFridayDateChanged(event: any) {
+    const countDays = typeof event === 'string' ? event : String(event.target?.value || event);
     const intValue = Number.parseInt(countDays);
-    if (!isNaN(intValue)) {
+    if (!Number.isNaN(intValue)) {
 
       this.dayUntilFriday = Number.parseInt(countDays);
       this.fridayDate = moment().add(this.dayUntilFriday, 'days').toDate();

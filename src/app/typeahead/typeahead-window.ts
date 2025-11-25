@@ -1,4 +1,6 @@
 import { Component, Input, Output, EventEmitter, TemplateRef, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgbHighlight } from './highlight';
 
 import { toString } from './util/util';
 
@@ -20,6 +22,8 @@ export interface ResultTemplateContext {
 @Component({
   selector: 'ngb-typeahead-window',
   exportAs: 'ngbTypeaheadWindow',
+  standalone: true,
+  imports: [CommonModule, NgbHighlight],
   host: { '(mousedown)': '$event.preventDefault()', 'class': 'search-autocomplete menu show', 'role': 'listbox', '[id]': 'id' },
   template: `
     <ng-template #rt let-result="result" let-term="term" let-formatter="formatter">

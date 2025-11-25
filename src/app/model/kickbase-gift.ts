@@ -1,6 +1,6 @@
 
 
-import * as numeral from 'numeral';
+import numeral from 'numeral';
 
 
 export class KickbaseGift {

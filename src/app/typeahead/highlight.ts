@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, ChangeDetectionStrategy, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { regExpEscape, toString } from './util/util';
 
 /**
@@ -11,10 +12,12 @@ import { regExpEscape, toString } from './util/util';
  */
 @Component({
   selector: 'ngb-highlight',
+  standalone: true,
+  imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `<ng-template ngFor [ngForOf]="parts" let-part let-isOdd="odd">` +
-    `<span *ngIf="isOdd; else even" [class]="highlightClass">{{part}}</span><ng-template #even>{{part}}</ng-template>` +
+    `@if (isOdd) { <span [class]="highlightClass">{{part}}</span> } @else { {{part}} }` +
     `</ng-template>`,  // template needs to be formatted in a certain way so we don't add empty text nodes
   styleUrls: ['./highlight.scss']
 })

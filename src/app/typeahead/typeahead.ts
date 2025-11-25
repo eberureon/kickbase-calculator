@@ -26,11 +26,11 @@ import { map, switchMap, tap } from 'rxjs/operators';
 import { ngbAutoClose } from './util/autoclose';
 import { Key } from './util/key';
 import { PopupService } from './util/popup';
-import { PlacementArray, positionElements } from './util/positioning';
+import { type PlacementArray, positionElements } from './util/positioning';
 import { isDefined, toString } from './util/util';
 
 import { NgbTypeaheadConfig } from './typeahead-config';
-import { NgbTypeaheadWindow, ResultTemplateContext } from './typeahead-window';
+import { NgbTypeaheadWindow, type ResultTemplateContext } from './typeahead-window';
 
 
 const NGB_TYPEAHEAD_VALUE_ACCESSOR = {
@@ -330,7 +330,7 @@ export class NgbTypeahead implements ControlValueAccessor,
   }
 
   private _closePopup() {
-    this._closed$.next();
+    this._closed$.next(null);
     this._popupService.close();
     this._windowRef = null;
     this.activeDescendant = undefined;

@@ -19,19 +19,19 @@ export class Positioning {
     return offsetParentEl || document.documentElement;
   }
 
-  position(element: HTMLElement, round = true): ClientRect {
-    let elPosition: ClientRect;
-    let parentOffset: ClientRect = { width: 0, height: 0, top: 0, bottom: 0, left: 0, right: 0 };
+  position(element: HTMLElement, round = true): DOMRect {
+    let elPosition: any;
+    let parentOffset: any = { width: 0, height: 0, top: 0, bottom: 0, left: 0, right: 0 };
 
     if (this.getStyle(element, 'position') === 'fixed') {
-      elPosition = element.getBoundingClientRect();
+      const bcr = element.getBoundingClientRect();
       elPosition = {
-        top: elPosition.top,
-        bottom: elPosition.bottom,
-        left: elPosition.left,
-        right: elPosition.right,
-        height: elPosition.height,
-        width: elPosition.width
+        top: bcr.top,
+        bottom: bcr.bottom,
+        left: bcr.left,
+        right: bcr.right,
+        height: bcr.height,
+        width: bcr.width
       };
     } else {
       const offsetParentEl = this.offsetParent(element);
@@ -61,7 +61,7 @@ export class Positioning {
     return elPosition;
   }
 
-  offset(element: HTMLElement, round = true): ClientRect {
+  offset(element: HTMLElement, round = true): DOMRect {
     const elBcr = element.getBoundingClientRect();
     const viewportOffset = {
       top: window.pageYOffset - document.documentElement.clientTop,
@@ -74,7 +74,10 @@ export class Positioning {
       top: elBcr.top + viewportOffset.top,
       bottom: elBcr.bottom + viewportOffset.top,
       left: elBcr.left + viewportOffset.left,
-      right: elBcr.right + viewportOffset.left
+      right: elBcr.right + viewportOffset.left,
+      x: elBcr.left + viewportOffset.left,
+      y: elBcr.top + viewportOffset.top,
+      toJSON() { return JSON.stringify(this); }
     };
 
     if (round) {

@@ -1,10 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { KickbaseGroup } from 'src/app/model/kickbase-group';
-import { KickbasePlayer } from 'src/app/model/kickbase-player';
-import { ApiService } from 'src/app/services/api.service';
+import { Component, EventEmitter, Input, type OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AngularSvgIconModule } from 'angular-svg-icon';
+import { KickbaseGroup } from '../../model/kickbase-group';
+import type { KickbasePlayer } from '../../model/kickbase-player';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-player-item',
+  standalone: true,
+  imports: [CommonModule, FormsModule, AngularSvgIconModule],
   templateUrl: './player-item.component.html',
   styleUrls: ['./player-item.component.scss']
 })

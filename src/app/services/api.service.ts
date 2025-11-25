@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { first, firstValueFrom } from 'rxjs';
 
 import { KickbaseLeague } from '../model/kickbase-league';
 import { KickbaseMarket } from '../model/kickbase-market';
@@ -20,7 +21,9 @@ export class Data {
 
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ApiService {
 
 
@@ -78,10 +81,10 @@ export class ApiService {
   async getMarketWinner(): Promise<string> {
     // 
     try {
-      const result = await this.http.get(
+      const result = await firstValueFrom(this.http.get(
         'https://pascalhenze.de/kickbase/corsproxy.php?url=https://www.ligainsider.de/stats/kickbase/marktwerte/tag/gewinner/', {
         responseType: 'json'
-      }).toPromise()
+      }));
 
       return Promise.resolve(result['contents']);
     } catch {
@@ -92,10 +95,10 @@ export class ApiService {
   async getMarketLooser(): Promise<string> {
     // 
     try {
-      const result = await this.http.get(
+      const result = await firstValueFrom(this.http.get(
         'https://pascalhenze.de/kickbase/corsproxy.php?url=https://www.ligainsider.de/stats/kickbase/marktwerte/tag/verlierer/', {
         responseType: 'json'
-      }).toPromise()
+      }));
 
       return Promise.resolve(result['contents']);
     } catch {
@@ -106,10 +109,10 @@ export class ApiService {
   async getMarketAll(): Promise<string> {
     // 
     try {
-      const result = await this.http.get(
+      const result = await firstValueFrom(this.http.get(
         'https://pascalhenze.de/kickbase/corsproxy.php?url=https://www.ligainsider.de/stats/kickbase/marktwerte/gesamt/', {
         responseType: 'json'
-      }).toPromise()
+      }));
 
       return Promise.resolve(result['contents']);
     } catch {
@@ -123,10 +126,10 @@ export class ApiService {
       if ((this.data.leagues === undefined || this.data.leagues.length === 0) && this.data.loggedInWithoutApi === false) {
       }
       await this.refreshToken();
-      // const result = await this.http.get(url, {
+      // const result = await firstValueFrom(this.http.get(url, {
       //   headers: this.customApiHeaders(),
       //   responseType: 'json'
-      // }).toPromise()
+      // }));
       // return KickbaseLeague.createArrayInstance(result);
       return this.data.leagues;
     } catch (e) {
@@ -146,10 +149,10 @@ export class ApiService {
 
     let url = this.baseUrl + 'leagues/' + league + '/market?sort=expiry';
     try {
-      const result = await this.http.get(url, {
+      const result = await firstValueFrom(this.http.get(url, {
         headers: this.customApiHeaders(),
         responseType: 'json'
-      }).toPromise()
+      }));
       return new KickbaseMarket(result, this.userID);
     } catch (e) {
       console.log(e);
@@ -179,12 +182,11 @@ export class ApiService {
       "pass": this.data.password,
       "rep": {}
     }
-    return this.http.post(url, payload, {
+    return firstValueFrom(this.http.post(url, payload, {
       responseType: 'json'
-    }).toPromise()
-      .then((response) => {
-        const user = response['u'];
-        this.userID = user['id'];
+    })).then((response) => {
+      const user = response['u'];
+      this.userID = user['id'];
         this.data.userID = this.userID;
         this.data.token = response['tkn'];
         this.data.leagues = KickbaseLeague.createArrayInstance(response['srvl']);
@@ -216,12 +218,11 @@ export class ApiService {
       'loy': false,
       'pass': password,
     }
-    return this.http.post(url, payload, {
+    return firstValueFrom(this.http.post(url, payload, {
       responseType: 'json'
-    }).toPromise()
-      .then((response) => {
-        const user = response['u'];
-        this.userID = user['id'];
+    })).then((response) => {
+      const user = response['u'];
+      this.userID = user['id'];
         this.data = {
           username: username,
           password: password,
@@ -251,10 +252,10 @@ export class ApiService {
 
     let url = this.baseUrl + 'leagues/' + league + '/squad';
     try {
-      const result = await this.http.get(url, {
+      const result = await firstValueFrom(this.http.get(url, {
         headers: this.customApiHeaders(),
         responseType: 'json'
-      }).toPromise()
+      }));
       return new KickbaseMarket(result, this.userID);
     } catch (e) {
       console.log(e);
@@ -273,10 +274,10 @@ export class ApiService {
 
     let url = this.baseUrl + 'leagues/' + league + '/currentgift';
     try {
-      const result = await this.http.get(url, {
+      const result = await firstValueFrom(this.http.get(url, {
         headers: this.customApiHeaders(),
         responseType: 'json'
-      }).toPromise()
+      }));
       return new KickbaseGift(result);
     } catch (e) {
       console.log(e);
@@ -295,10 +296,10 @@ export class ApiService {
 
     let url = this.baseUrl + 'leagues/' + league + '/collectgift';
     try {
-      const result = await this.http.post(url, {}, {
+      const result = await firstValueFrom(this.http.post(url, {}, {
         headers: this.customApiHeaders(),
         responseType: 'json'
-      }).toPromise();
+      }));
       return result;
     } catch (e) {
       console.log(e);
@@ -316,10 +317,10 @@ export class ApiService {
     // https://api.kickbase.com/leagues/868390/players/2322/stats
     let url = this.baseUrl + 'competitions/1/players/' + playerID + '?leagueId=' + league;
     try {
-      const result = await this.http.get(url, {
+      const result = await firstValueFrom(this.http.get(url, {
         headers: this.customApiHeaders(),
         responseType: 'json'
-      }).toPromise()
+      }));
       return new KickbasePlayerStats(result);
 
     } catch (e) {
@@ -338,10 +339,10 @@ export class ApiService {
     // https://api.kickbase.com/leagues/868390/players/2322/stats
     let url = this.baseUrl + 'competitions/1/players/' + playerID + '/marketValue/92?leagueId=' + league;
     try {
-      const result = await this.http.get(url, {
+      const result = await firstValueFrom(this.http.get(url, {
         headers: this.customApiHeaders(),
         responseType: 'json'
-      }).toPromise()
+      }));
       return new KickbasePlayerStats(result);
 
     } catch (e) {

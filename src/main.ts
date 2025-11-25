@@ -1,12 +1,34 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { importProvidersFrom } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { AngularSvgIconModule } from 'angular-svg-icon';
+import { RouterModule } from '@angular/router';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
-import { AppModule } from './app/app.module';
+import { AppComponent } from './app/app.component';
+import { ApiService } from './app/services/api.service';
+import { LocalApiService } from './app/services/local-api.service';
 import { environment } from './environments/environment';
 
 if (environment.production) {
-  enableProdMode();
+  // Not needed for Angular 17+, production mode is automatic
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    ApiService,
+    LocalApiService,
+    importProvidersFrom(
+      FormsModule,
+      HttpClientModule,
+      BsDropdownModule.forRoot(),
+      ModalModule.forRoot(),
+      AngularSvgIconModule.forRoot(),
+      RouterModule.forRoot([]),
+      AutocompleteLibModule
+    )
+  ]
+}).catch(err => console.log(err));

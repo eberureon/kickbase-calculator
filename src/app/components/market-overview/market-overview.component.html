@@ -1,4 +1,5 @@
-<div *ngIf="currentMarket !== null">
+@if (currentMarket !== null) {
+<div>
     <div class="row">
         <div class="col-12 mt-4">
             <div class="custom-control custom-switch">
@@ -21,13 +22,14 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <ng-container *ngFor="let player of playersToShow">
+            @for (player of playersToShow; track player.id) {
                 <app-player-item [player]="player" [printMode]="false" [withoutApi]="false" [isMarketOverview]="true"
                     (loadDetails)="onLoadAllDetailsForPlayer(player)">
                 </app-player-item>
-            </ng-container>
+            }
         </div>
 
     </div>
 
 </div>
+}

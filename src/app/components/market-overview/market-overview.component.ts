@@ -1,11 +1,16 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { KickbaseMarket } from 'src/app/model/kickbase-market';
-import { KickbasePlayer } from 'src/app/model/kickbase-player';
-import { ApiService } from 'src/app/services/api.service';
-import * as numeral from 'numeral';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AngularSvgIconModule } from 'angular-svg-icon';
+import { PlayerItemComponent } from '../player-item/player-item.component';
+import type { KickbaseMarket } from '../../model/kickbase-market';
+import type { KickbasePlayer } from '../../model/kickbase-player';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-market-overview',
+  standalone: true,
+  imports: [CommonModule, FormsModule, AngularSvgIconModule, PlayerItemComponent],
   templateUrl: './market-overview.component.html',
   styleUrls: ['./market-overview.component.scss']
 })

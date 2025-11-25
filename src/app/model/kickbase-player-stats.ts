@@ -1,6 +1,6 @@
 
 
-import * as numeral from 'numeral';
+import numeral from 'numeral';
 import { KickbasePlayerNextMatch } from './kickbase-player-next-match';
 export class KickbasePlayerStats {
 

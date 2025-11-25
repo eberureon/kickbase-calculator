@@ -1,9 +1,9 @@
 
 
-import * as numeral from 'numeral';
+import numeral from 'numeral';
 import { ApiService } from '../services/api.service';
 import { KickbasePlayerStats } from './kickbase-player-stats';
-import * as moment from 'moment';
+import moment from 'moment';
 import { KickbaseGroup } from './kickbase-group';
 
 export class KickbasePlayer {
